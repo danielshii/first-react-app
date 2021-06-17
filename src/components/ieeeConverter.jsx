@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import { Form, InputGroup, Jumbotron } from "react-bootstrap";
 import "../styles/index.css";
-import Button from "./button";
-import { MDBSwitch } from "mdbreact";
 
 class IEEEConverter extends Component {
   state = {
@@ -14,6 +12,19 @@ class IEEEConverter extends Component {
 
   handleSwitchChange = () => {
     this.setState({ isHexFormat: !this.state.isHexFormat });
+    if (this.state.input !== "" && !this.state.hasFormattingError) {
+      if (!this.state.isHexFormat) {
+        this.setState({
+          input: parseInt(this.state.input, 2).toString(16).toUpperCase(),
+        });
+      } else {
+        this.setState({
+          input: parseInt(this.state.input.toString(), 16).toString(2),
+        });
+      }
+    } else {
+      this.setState({ input: "" });
+    }
   };
 
   convert = (inputString) => {
@@ -135,7 +146,7 @@ class IEEEConverter extends Component {
                 value={this.state.input}
                 onChange={(e) => {
                   e.preventDefault();
-                  this.setState({ input: e.target.value });
+                  this.setState({ input: e.target.value.toUpperCase() });
                   this.convert(e.target.value);
                 }}
                 isInvalid={this.state.hasFormattingError}
