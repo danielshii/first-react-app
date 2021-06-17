@@ -27,71 +27,76 @@ class IEEEConverter extends Component {
     }
   };
 
+  isCorrectHexFormat = (hexString) => {
+    var a = parseInt(hexString, 16);
+    return a.toString(16) === hexString.toLowerCase();
+  };
+
   convert = (inputString) => {
-    try {
-      //convert to binary if input is in hex notation
-      if (this.state.isHexFormat) {
-        inputString = parseInt(inputString.toString(), 16).toString(2);
-      }
-
-      let ans = 0;
-
-      if (inputString.length == 0) {
+    //convert to binary if input is in hex notation
+    if (this.state.isHexFormat) {
+      if (!this.isCorrectHexFormat(inputString)) {
         this.setState({ result: "", hasFormattingError: true });
         return;
       }
+      inputString = parseInt(inputString.toString(), 16).toString(2);
+    }
 
-      if (inputString.length > 32) {
-        this.setState({ result: "", hasFormattingError: true });
-        return;
+    let ans = 0;
+
+    if (inputString.length == 0) {
+      this.setState({ result: "", hasFormattingError: true });
+      return;
+    }
+
+    if (inputString.length > 32) {
+      this.setState({ result: "", hasFormattingError: true });
+      return;
+    }
+
+    //append 0s to the front if needed
+    if (inputString.length < 32) {
+      let iterations = 32 - inputString.length;
+      for (let i = 0; i < iterations; i++) {
+        inputString = "0" + inputString;
       }
+    }
 
-      //append 0s to the front if needed
-      if (inputString.length < 32) {
-        let iterations = 32 - inputString.length;
-        for (let i = 0; i < iterations; i++) {
-          inputString = "0" + inputString;
-        }
-      }
+    //handling sign bit
+    let bit = parseInt(inputString[0].toString());
+    if (bit != 0 && bit != 1) {
+      this.setState({ result: "", hasFormattingError: true });
+      return;
+    }
+    let neg = 1;
+    if (bit == 1) {
+      neg = -1;
+    }
 
-      //handling sign bit
-      let bit = parseInt(inputString[0].toString());
+    //handling exponent
+    let exponent = 0;
+    for (let index = 1; index <= 8; index++) {
+      bit = parseInt(inputString[index].toString());
       if (bit != 0 && bit != 1) {
         this.setState({ result: "", hasFormattingError: true });
         return;
       }
-      let neg = 1;
-      if (bit == 1) {
-        neg = -1;
-      }
-
-      //handling exponent
-      let exponent = 0;
-      for (let index = 1; index <= 8; index++) {
-        bit = parseInt(inputString[index].toString());
-        if (bit != 0 && bit != 1) {
-          this.setState({ result: "", hasFormattingError: true });
-          return;
-        }
-        exponent += parseInt(bit) * Math.pow(2, 8 - index);
-      }
-
-      //handling decimal
-      let fraction = 0;
-      for (let index = 9; index < inputString.length; index++) {
-        bit = parseInt(inputString[index].toString());
-        if (bit != 0 && bit != 1) {
-          this.setState({ result: "", hasFormattingError: true });
-          return;
-        }
-        fraction += parseInt(bit) * Math.pow(2, -(index - 8));
-      }
-
-      ans = neg * (1 + fraction) * Math.pow(2, exponent - 127);
-      this.setState({ result: ans.toString(), hasFormattingError: false });
-    } catch (err) {
-      this.setState({ result: "", hasFormattingError: true });
+      exponent += parseInt(bit) * Math.pow(2, 8 - index);
     }
+
+    //handling decimal
+    let fraction = 0;
+    for (let index = 9; index < inputString.length; index++) {
+      bit = parseInt(inputString[index].toString());
+      if (bit != 0 && bit != 1) {
+        this.setState({ result: "", hasFormattingError: true });
+        return;
+      }
+      fraction += parseInt(bit) * Math.pow(2, -(index - 8));
+    }
+
+    ans = neg * (1 + fraction) * Math.pow(2, exponent - 127);
+    this.setState({ result: ans.toString(), hasFormattingError: false });
   };
 
   render() {
