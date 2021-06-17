@@ -12,15 +12,17 @@ class About extends Component {
           their studies
         </p>
         <p>Happy computing!</p>
-        <p>
-          Follow the creator of this site on{" "}
-          <a href="https://instagram.com/daniel.shii" target="_blank">
-            Instagram
-          </a>
-        </p>
-        <p>
-          <i>More tools coming soon...</i>
-        </p>
+        <small>
+          <p>
+            Follow the creator of this site on{" "}
+            <a href="https://instagram.com/daniel.shii" target="_blank">
+              Instagram
+            </a>
+          </p>
+          <p>
+            <i>More tools coming soon...</i>
+          </p>
+        </small>
       </div>
     );
   }

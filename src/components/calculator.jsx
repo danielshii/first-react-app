@@ -1,6 +1,4 @@
 import React, { Component } from "react";
-import Counter from "./counter";
-//import Dropdown from "react-dropdown";
 import "react-dropdown/style.css";
 import Button from "./button";
 import {

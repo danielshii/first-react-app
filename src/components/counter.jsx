@@ -24,8 +24,8 @@ class Counter extends Component {
     return (
       <div>
         <h1 className="badge badge-dark badge-pill">{this.state.count}</h1>
-        <CustomButton text="Increment" action={() => this.handleIncrement()} />
-        <CustomButton
+        <Button text="Increment" action={() => this.handleIncrement()} />
+        <Button
           text="Generate Random Number [1-100]"
           action={() => this.handleRandomNum()}
         />

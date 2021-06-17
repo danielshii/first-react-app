@@ -5,6 +5,7 @@ import About from "./about";
 import Converter from "./converter";
 //import Button from "./button";
 //import { useHistory } from "react-router-dom";
+import IEEEConverter from "./ieeeConverter";
 import Footer from "./footer";
 //import { Tooltip } from "bootstrap";
 import "../styles/index.css";
@@ -27,6 +28,9 @@ function Homepage() {
         </Tab>
         <Tab eventKey="Calculator" title="Calculator">
           <Calculator />
+        </Tab>
+        <Tab eventKey="ieeeConverter" title="IEEE-754 Converter">
+          <IEEEConverter />
         </Tab>
         <Tab eventKey="about" title="About">
           <About />
